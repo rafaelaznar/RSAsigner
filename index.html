@@ -54,10 +54,10 @@
 </head>
 
 <body>
-    
+
     <h1 class="center">RSA signer</h1>
     <button id="reset" class="center">Reset</button>
-    <textarea id="text2sign" rows="3" placeholder="Texto to sign"></textarea>
+    <textarea id="text2sign" rows="3" placeholder="Text to sign"></textarea>
     <textarea id="privateKey" rows="10" placeholder="Private key"></textarea>
     <button id="sign" class="center">Sign</button>
     <p>Signature:</p>
@@ -65,6 +65,15 @@
     <button class="center" id="copySignature">Copy signature</button>
 
     <script>
+        function copyToClipboard(elementId) {
+            const el = document.createElement('textarea');
+            el.value = document.getElementById(elementId).textContent;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+
         async function exportKey(key) {
             const exported = await window.crypto.subtle.exportKey("jwk", key);
             return exported;
@@ -89,6 +98,11 @@
             });
 
             document.getElementById("sign").addEventListener("click", signText);
+
+            document.getElementById("copySignature").addEventListener("click", () => {
+                copyToClipboard("signature");
+            });
+
         })
 
     </script>
